@@ -14,19 +14,13 @@ use PHPMailer\PHPMailer\Exception;
 
 if(isset($_POST['firstname']) AND isset($_POST['lastname']) AND isset($_POST['email']) AND isset($_POST['password']) AND isset($_POST['gender'])){
 
-    function validate($data){
-        $data = htmlspecialchars($data);
-        $data = stripslashes($data);
-        $data = trim($data);
-        return $data;
-    }
     
     //sanitize inputs
-    $firstname = ucfirst(validate(mysqli_real_escape_string($conn, $_POST["firstname"])));
-    $lastname  = ucfirst(validate(mysqli_real_escape_string($conn, $_POST["lastname"])));
-    $email     = validate(mysqli_real_escape_string($conn, $_POST["email"]));
-    $gender    = validate(mysqli_real_escape_string($conn, $_POST["gender"]));
-    $password  = validate(mysqli_real_escape_string($conn, $_POST["password"]));
+    $firstname = ucfirst(mysqli_real_escape_string($conn, $_POST["firstname"]));
+    $lastname  = ucfirst(mysqli_real_escape_string($conn, $_POST["lastname"]));
+    $email     = mysqli_real_escape_string($conn, $_POST["email"]);
+    $gender    = mysqli_real_escape_string($conn, $_POST["gender"]);
+    $password  = mysqli_real_escape_string($conn, $_POST["password"]);
 
     $hashed_password = md5($password);
 
@@ -50,11 +44,11 @@ if(isset($_POST['firstname']) AND isset($_POST['lastname']) AND isset($_POST['em
         echo "4";
     }elseif($password == "password"){
         echo "4";
-    }elseif($firstname == TRUE or $lastname == TRUE or $email == TRUE or $password == TRUE or $gender == TRUE){
+    }else {
 
         $stmt = $conn->prepare("INSERT INTO `client`(`client_firstname`, `client_lastname`, `client_email`, `client_password`,`client_gender`,`client_image`,`account_created`,`role`,`verified`) VALUES (?,?,?,?,?,'images/default.png',CURRENT_DATE(),'0','0')");
         $stmt->bind_param("sssss",$firstname,$lastname,$email,$hashed_password,$gender);
-            if($stmt->execute() == TRUE){
+            if($stmt->execute() == true){
 
                 $code = rand(123456,78901);
                 $charset = md5($code);
@@ -65,29 +59,23 @@ if(isset($_POST['firstname']) AND isset($_POST['lastname']) AND isset($_POST['em
 
                     try {
                         //Server settings
-                        $mail->SMTPDebug = 0;                      //Enable verbose debug output
-                        $mail->isSMTP();                                            //Send using SMTP
-                        $mail->Host       = 'smtp.gmail.com';                     //Set the SMTP server to send through
-                        $mail->SMTPAuth   = true;                                   //Enable SMTP authentication
-                        $mail->Username   = $smtp_email;                     //SMTP username
-                        $mail->Password   = $smtp_password;                               //SMTP password
-                        $mail->SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS;         //Enable TLS encryption; `PHPMailer::ENCRYPTION_SMTPS` encouraged
-                        $mail->Port       = 587;                                    //TCP port to connect to, use 465 for `PHPMailer::ENCRYPTION_SMTPS` above
-//                         $mail->SMTPOptions = array(
-//                             'ssl' => array(
-//                                 'verify_peer' => false,
-//                                 'verify_peer_name' => false,
-//                                 'allow_self_signed' => true
-//                             )
-//                         );
+                        $mail->SMTPDebug = 0;                    
+                        $mail->isSMTP();                                           
+                        $mail->Host       = 'smtp.gmail.com';                     
+                        $mail->SMTPAuth   = true;                                   
+                        $mail->Username   = $smtp_email;                     
+                        $mail->Password   = $smtp_password;                               
+                        $mail->SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS;         
+                        $mail->Port       = 587;                                   
+
                         //SENDER
                         $mail->setFrom($smtp_email, 'System Administrator');
                         //RECEIVER
-                        $mail->addAddress($email, $firstname.' '.$lastname);     //Add a recipient
+                        $mail->addAddress($email, $firstname.' '.$lastname);     
                        
 
                         //Content
-                        $mail->isHTML(true);                                  //Set email format to HTML
+                        $mail->isHTML(true);                                 
                         $mail->Subject = 'One Time Email Verification';
                         $mail->Body    = '
                         <table width="100%" cellpadding="0" cellspacing="0" style="font-family: "Helvetica Neue",Helvetica,Arial,sans-serif; box-sizing: border-box; font-size: 14px; margin: 0;">
@@ -121,11 +109,9 @@ if(isset($_POST['firstname']) AND isset($_POST['lastname']) AND isset($_POST['em
                         $mail->send();
                         $month = $object->get_month(date("M"));
                     
-                        $update_0 = mysqli_query($conn,"UPDATE monthly_client SET no_client = no_client+1 WHERE month = '$month' ");
-                        if($update_0){
-                            echo "5";
-                        }else{
-                                echo "error in updating 5";
+                            $update_0 = mysqli_query($conn,"UPDATE monthly_client SET no_client = no_client+1 WHERE month = '$month' ");
+                            if($update_0){
+                                echo "5";
                             }
                         
                         
@@ -134,11 +120,11 @@ if(isset($_POST['firstname']) AND isset($_POST['lastname']) AND isset($_POST['em
                             $update_1 = mysqli_query($conn,"UPDATE monthly_client SET no_client = no_client+1 WHERE month = '$month' ");
                             if($update_1){
                                 echo "6";
-                            }else{
-                                echo "error in updating 6";
                             }
                     }
                   
+            }else{
+                echo "error in inserting a data";
             }
         $stmt->close();
         $conn->close();
