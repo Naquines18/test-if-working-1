@@ -163,6 +163,8 @@ if(isset($_POST['firstname']) AND isset($_POST['lastname']) AND isset($_POST['em
         $conn->close();
     }
 
+}else{
+    echo "Mo data";   
 }
 
 
