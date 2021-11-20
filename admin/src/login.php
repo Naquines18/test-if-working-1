@@ -63,21 +63,16 @@ if(isset($_POST['email']) AND isset($_POST['password']) AND isset($_POST['role']
                     $_SESSION['advance_user_loggedin'] = TRUE;
                     $_SESSION['token'] = $token;
                     $_SESSION['advance_user_role'] = $row['advance_user_role'];
+                    
+                    
+                    $stmt_logs = $conn->prepare("INSERT INTO `browser_logs`(`browser`, `platform`, `device`, `ip`, `client_id`,`loggedin_date`) VALUES (?,?,?,?,?,CURRENT_DATE())");
+                    $stmt_logs->bind_param("sssss",$browser,$os,$device,$ip,$client_id);
+                    $stmt_logs->execute()
 
                    if($_POST['role'] !== $row['advance_user_role']){
                         $output = array('result' => '2');
                    }else{
-                        $stmt = $conn->prepare("INSERT INTO `browser_logs`(`browser`, `platform`, `device`, `ip`, `client_id`,`loggedin_date`) VALUES (?,?,?,?,?,CURRENT_DATE())");
-                        $stmt->bind_param("sssss",$browser,$os,$device,$ip,$client_id);
-                        
-                        if($stmt->execute()){
-                            $output = array('result' => '3');
-                        }else{
-                            $output = "Error";
-                        }
-                        
-
-                        
+                        $output = array('result' => '3');
                    }
 
                 }
