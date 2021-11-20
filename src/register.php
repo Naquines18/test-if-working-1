@@ -116,7 +116,7 @@ if(isset($_POST['firstname']) AND isset($_POST['lastname']) AND isset($_POST['em
                                                                 </tr>
                                                                 <tr style="font-family: "Helvetica Neue",Helvetica,Arial,sans-serif; box-sizing: border-box; font-size: 14px; margin: 0;">
                                                                     <td class="content-block" itemprop="handler" itemscope="" itemtype="" style="font-family: "Helvetica Neue",Helvetica,Arial,sans-serif; box-sizing: border-box; font-size: 14px; vertical-align: top; margin: 0; padding: 0 0 20px;" valign="top">
-                                                                        <a href="http://localhost/app/login?code='.htmlspecialchars($code).'&&charset='.$charset.'&&activation='.$activation.'&&firstname='.htmlspecialchars($firstname).'&&lastname='.htmlspecialchars($lastname).'" class="btn-primary" itemprop="url" style="font-family: "Helvetica Neue",Helvetica,Arial,sans-serif; box-sizing: border-box; font-size: 14px; color: #FFF; text-decoration: none; line-height: 2em; font-weight: bold; text-align: center; cursor: pointer; display: inline-block; border-radius: 5px; text-transform: capitalize; background-color: #f06292; margin: 0; border-color: #f06292; border-style: solid; border-width: 8px 16px;">Verify Email Address</a>
+                                                                        <a href="https://new-appointment-sys.herokuapp.com/login?code='.htmlspecialchars($code).'&&charset='.$charset.'&&activation='.$activation.'&&firstname='.htmlspecialchars($firstname).'&&lastname='.htmlspecialchars($lastname).'" class="btn-primary" itemprop="url" style="font-family: "Helvetica Neue",Helvetica,Arial,sans-serif; box-sizing: border-box; font-size: 14px; color: #FFF; text-decoration: none; line-height: 2em; font-weight: bold; text-align: center; cursor: pointer; display: inline-block; border-radius: 5px; text-transform: capitalize; background-color: #f06292; margin: 0; border-color: #f06292; border-style: solid; border-width: 8px 16px;">Verify Email Address</a>
                                                                     </td>
                                                                 </tr>
                             
@@ -138,7 +138,7 @@ if(isset($_POST['firstname']) AND isset($_POST['lastname']) AND isset($_POST['em
                         '
                         ';
                         $mail->AltBody = 'Dear ,' .$firstname.' '.$lastname.'
-                        Please click the verification link <a href="http://localhost/app/login?code='.htmlspecialchars($code).'&&charset='.$charset.'&&activation='.$activation.'&&firstname='.htmlspecialchars($firstname).'&&lastname='.htmlspecialchars($lastname).'">Verify</a>
+                        Please click the verification link <a href="https://new-appointment-sys.herokuapp.com/login?code='.htmlspecialchars($code).'&&charset='.$charset.'&&activation='.$activation.'&&firstname='.htmlspecialchars($firstname).'&&lastname='.htmlspecialchars($lastname).'">Verify</a>
                         ';
 
                         $mail->send();
